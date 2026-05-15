@@ -1,0 +1,251 @@
+/* ==========================================================================
+   LAYOUT • ZENTRIK
+   Disposición general, contenedores, header/footer y grillas utilitarias
+   Depende de variables definidas en base.css
+   ========================================================================== */
+
+/* ===== Página ===== */
+.page {
+    min-height: 100svh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* ===== Contenedor fluido ===== */
+.container {
+    width: min(1080px, 94vw);
+    margin-inline: auto;
+    padding: 14px 16px;
+}
+
+/* ===== Header (sticky, con blur sutil) ===== */
+.header {
+    position: sticky;
+    top: 0;
+    z-index: 40;
+    background: linear-gradient(180deg,
+            color-mix(in srgb, var(--panel) 92%, #fff 8%),
+            var(--panel-2));
+    border-bottom: 1px solid color-mix(in srgb, var(--border) 90%, transparent);
+    backdrop-filter: saturate(1.08) blur(2px);
+}
+
+.header .container {
+    padding-block: 10px;
+}
+
+.header .row {
+    display: grid;
+    grid-template-columns: minmax(0, auto) 1fr minmax(0, auto);
+    align-items: center;
+    gap: 16px;
+    min-width: 0;
+    /* clave para que la col central pueda encoger */
+}
+
+.header .row>* {
+    min-width: 0;
+}
+
+/* Logo (acepta <img> o fondo) */
+.logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+}
+
+
+.logo .brand {
+    width: clamp(110px, 16vw, 140px);
+    height: 28px;
+    background: url('/img/ZENTRIK.png') no-repeat left center / contain;
+}
+
+/* Título de página */
+.header .title {
+    font-size: clamp(14px, 2.2vw, 18px);
+    font-weight: 800;
+    letter-spacing: .3px;
+    color: #d8e6fb;
+    text-wrap: balance;
+    user-select: none;
+    filter: drop-shadow(0 1px 0 rgba(0, 0, 0, .25));
+
+    /* anti-scroll horizontal */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* Acciones del header */
+.header .right {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    /* si no entra, baja a 2 filas */
+    justify-content: end;
+    row-gap: 6px;
+    max-width: 100%;
+}
+
+.header .right>* {
+    flex: 0 0 auto;
+    white-space: nowrap;
+}
+
+/* ===== Tarjetas ===== */
+.card {
+    background: var(--surface-grad);
+    border: 1px solid color-mix(in srgb, var(--border) 85%, transparent);
+    border-radius: var(--radius);
+    padding: 12px;
+    box-shadow: var(--shadow-lg);
+}
+
+/* ===== Grilla utilitaria ===== */
+.grid {
+    display: grid;
+    gap: 12px;
+}
+
+.grid.cols-2 {
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.grid.cols-3 {
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.grid.cols-4 {
+    grid-template-columns: repeat(4, 1fr);
+}
+
+/* Evita que inputs enormes rompan columnas estrechas */
+.grid>* {
+    min-width: 0;
+}
+
+/* ===== Zonas de tablas: scroll interno si hace falta ===== */
+.table-wrap,
+.card .table-wrap,
+.card[style*="overflow:auto"] {
+    max-height: 58vh;
+    /* cabe cómodo en móviles en vertical */
+    overflow: auto;
+    border-radius: inherit;
+}
+
+/* ===== Footer ===== */
+.footer {
+    margin-top: auto;
+    padding: 10px 16px;
+    border-top: 1px solid color-mix(in srgb, var(--border) 85%, transparent);
+    color: var(--muted);
+    font-size: 12px;
+    text-align: center;
+    background: linear-gradient(180deg, transparent, rgba(255, 255, 255, .01));
+}
+
+/* ===== Topbar simple (pantallas de login/rol si la usas) ===== */
+.topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: linear-gradient(180deg, var(--panel), var(--panel-2));
+    border-bottom: 1px solid color-mix(in srgb, var(--border) 90%, transparent);
+    padding: 10px 14px;
+}
+
+.brand-logo {
+    height: 28px;
+    width: auto;
+    display: block;
+}
+
+.topbar-right {
+    color: #cbd5e1;
+    font-weight: 600;
+}
+
+/* ===== Utilidades de espaciado/layout ===== */
+.stack-sm {
+    display: grid;
+    gap: 8px;
+}
+
+.stack-md {
+    display: grid;
+    gap: 12px;
+}
+
+.stack-lg {
+    display: grid;
+    gap: 16px;
+}
+
+.row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.row.wrap {
+    flex-wrap: wrap;
+}
+
+/* ==========================================================================
+   Responsivo
+   ========================================================================== */
+
+@media (max-width: 900px) {
+    .container {
+        padding: 12px;
+    }
+
+    .grid.cols-4 {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 720px) {
+    .header .container {
+        padding-block: 8px;
+    }
+
+    .grid.cols-3 {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .grid.cols-4 {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 520px) {
+
+    .grid.cols-2,
+    .grid.cols-3,
+    .grid.cols-4 {
+        grid-template-columns: 1fr;
+    }
+
+    .header .right .btn.small {
+        font-size: 13px;
+        padding: 7px 9px;
+    }
+
+    .header .right {
+        gap: 8px;
+    }
+}
+
+/* El logo no fuerza ancho imposible en pantallas chicas */
+.logo img {
+    height: 26px;
+    max-width: 40vw;
+}
+
+/* Ocultar logo en todo tamaño: sólo queda la flecha */
+.header .logo img { display: none !important; }
+.header .logo { gap: 6px !important; }

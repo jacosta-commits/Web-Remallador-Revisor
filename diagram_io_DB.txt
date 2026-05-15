@@ -1,0 +1,92 @@
+///////////////////////////////////////////////////////////////
+// FISA · RCN Remallado — Modelo (con SESION_ROL)
+///////////////////////////////////////////////////////////////
+
+/* ======= CATÁLOGO (alias, sin duplicar datos) ======= */
+Table RCN_REM_FALLA [note: 'ALIAS/VIEW de APPSHEET001.dbo.fallas_remalle; no duplica datos'] {
+  codfal int [pk]                  // = fallas_remalle.codigo
+  desfal varchar(120) [not null]   // = defecto
+  tipfal varchar(40)               // = tipo/unidad (ej. MALLA)
+}
+
+Table RCN_REM_ROL [note: 'Roles: RM=Remallador, RV=Revisor'] {
+  rolcod char(2) [pk]              // 'RM','RV'
+  rolnom varchar(60) [not null]
+  rolstd bool [not null, default: true]
+}
+
+/* ======= OPERACIÓN ======= */
+Table RCN_REM_SESION [note: 'Turno abierto por trabajador'] {
+  sescod bigint [pk, increment]
+  tracod varchar(30) [not null]       // código trabajador (RRHH)
+  turnum int [not null]               // 1..8 (sin 6)
+  fecdia date [not null]              // fecha operativa (LOCAL)
+  fecini datetime [not null]          // apertura (LOCAL)
+  fecfin datetime                     // cierre (LOCAL)
+  devuuid char(36)                    // opcional (identificar dispositivo)
+  sesstd bool [not null, default: true]
+  active_jti VARCHAR(64)
+}
+
+Table RCN_REM_SESION_ROL [note: 'Segmento de la sesión por rol (permitir cambios de rol)'] {
+  srolcod bigint [pk, increment]
+  sescod bigint [not null, ref: > RCN_REM_SESION.sescod]
+  rolcod char(2) [not null, ref: > RCN_REM_ROL.rolcod]
+  fecini datetime [not null]          // inicio tramo (LOCAL)
+  fecfin datetime                     // fin tramo (LOCAL)
+  srolstd bool [not null, default: true]
+
+  indexes { (sescod, rolcod) [name: 'IX_SESROL_LOOKUP'] }
+}
+
+/* ======= PARTE (cabecera) ======= */
+Table RCN_REM_PARTE [note: 'Cabecera por envío (lote)'] {
+  partecod bigint [pk, increment]
+  srolcod bigint [not null, ref: > RCN_REM_SESION_ROL.srolcod]
+  lotcod varchar(50) [not null]         // N° de lote
+  prodnom varchar(150)                  // nombre del producto (texto libre)
+  fecins datetime [not null]            // CUÁNDO se presionó “ENVIAR” (LOCAL)
+  parstd bool [not null, default: true]
+
+  indexes {
+    (lotcod) [name: 'IX_RCN_REM_PARTE_LOTE']
+    (fecins) [name: 'IX_RCN_REM_PARTE_FECHA']  // consultas por fecha/hora de envío
+  }
+}
+
+/* ======= DETALLE (por falla) ======= */
+Table RCN_REM_PARTE_DET [note: 'Líneas: (falla) + (cantidad numérica)'] {
+  detcod bigint [pk, increment]
+  partecod bigint [not null, ref: > RCN_REM_PARTE.partecod]
+  codfal int [not null, ref: > RCN_REM_FALLA.codfal]
+  cantidad decimal(12,2) [not null]      // número; interpreta como UND o YARD según tipfal
+  fecins datetime [not null]             // PRIMER momento que quedó registrada la falla en el parte (LOCAL)
+  fecult datetime                        // ÚLTIMO ajuste previo al envío (LOCAL)
+  detstd bool [not null, default: true]
+
+  indexes {
+    (partecod, codfal) [unique, name: 'UQ_PARTE_FAL']  // una fila por falla dentro del parte
+    (partecod) [name: 'IX_DET_POR_PARTE']
+    (codfal)   [name: 'IX_DET_POR_FALLA']
+    (fecult)   [name: 'IX_DET_POR_FECHA']              // consultas por hora del “+”
+  }
+}
+
+/* ======= ORÍGENES REALES (read-only) ======= */
+Table APPSHEET001_FALLAS_REMALLE [note: 'TABLE real: APPSHEET001.dbo.fallas_remalle'] {
+  codigo int [pk]
+  defecto varchar(120)
+  tipo varchar(40)
+}
+
+Table APPSHEET001_VIEW_CHANCAY_RRHH_TRABAJADOR [note: 'VIEW real: APPSHEET001.dbo.VIEW_CHANCAY_RRHH_TRABAJADOR'] {
+  codigo_trabajador varchar(30) [pk]
+  nombres_trabajador varchar(80)
+  apellido_paterno_trabajador varchar(80)
+  apellido_materno_trabajador varchar(80)
+  nombre_completo_trabajador varchar(200)
+}
+
+/* ======= RELACIONES (solo EXTERNAS para diagrama) ======= */
+Ref: RCN_REM_FALLA.codfal  > APPSHEET001_FALLAS_REMALLE.codigo
+Ref: RCN_REM_SESION.tracod > APPSHEET001_VIEW_CHANCAY_RRHH_TRABAJADOR.codigo_trabajador

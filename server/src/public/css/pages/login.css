@@ -1,0 +1,393 @@
+/* ==========================================================================
+   LOGIN • ZENTRIK
+   Pantalla centrada, moderna y sin scroll innecesario
+   Depende de variables definidas en base.css
+   ========================================================================== */
+
+/* ===== Lienzo de fondo ===== */
+.screen--login {
+    min-height: 100svh;
+    display: grid;
+    place-items: center;
+    background:
+        radial-gradient(1200px 800px at 10% -10%,
+            color-mix(in srgb, var(--zentrik) 10%, transparent), transparent 60%),
+        radial-gradient(1000px 700px at 110% 110%,
+            color-mix(in srgb, #8b5cf6 18%, transparent), transparent 62%),
+        var(--bg);
+    overflow: hidden;
+    position: relative;
+}
+
+/* blobs suaves animados */
+.screen--login::before,
+.screen--login::after {
+    content: "";
+    position: absolute;
+    width: 58vmax;
+    height: 58vmax;
+    filter: blur(48px);
+    opacity: .18;
+    border-radius: 50%;
+    pointer-events: none;
+    transform: translate(-20%, -20%);
+    background: radial-gradient(closest-side, var(--zentrik), transparent);
+    animation: floatBlob 18s ease-in-out infinite alternate;
+}
+
+.screen--login::after {
+    right: -20%;
+    bottom: -20%;
+    left: auto;
+    top: auto;
+    background: radial-gradient(closest-side, #8b5cf6, transparent);
+    animation-delay: -6s;
+}
+
+@keyframes floatBlob {
+    0% {
+        transform: translate(-20%, -20%) scale(1);
+    }
+
+    100% {
+        transform: translate(-14%, -16%) scale(1.06);
+    }
+}
+
+/* ===== Tarjeta de login ===== */
+.login-card {
+    width: clamp(300px, 92vw, 520px);
+    padding: clamp(16px, 3vw, 28px);
+    background: var(--surface-grad, linear-gradient(180deg, var(--panel), var(--panel-2)));
+    border: 1px solid color-mix(in srgb, var(--border) 85%, transparent);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-lg);
+    display: grid;
+    gap: clamp(10px, 2vh, 16px);
+    position: relative;
+    transform-origin: top center;
+    overflow: hidden;
+    isolation: isolate;
+    animation: cardIn .28s cubic-bezier(.2, .65, .2, 1);
+}
+
+@keyframes cardIn {
+    from {
+        transform: translateY(10px) scale(.98);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+    }
+}
+
+/* brillo muy sutil al hover */
+.login-card::after {
+    content: "";
+    position: absolute;
+    inset: -2px;
+    border-radius: inherit;
+    background: radial-gradient(500px 300px at var(--mx, 80%) -10%,
+            rgba(255, 255, 255, .06), transparent 60%);
+    opacity: 0;
+    transition: opacity .25s ease;
+    pointer-events: none;
+}
+
+.login-card:hover::after {
+    opacity: 1;
+}
+
+/* ===== Marca / logo ===== */
+.login-brand {
+    display: grid;
+    place-items: center;
+    gap: 6px;
+    margin-bottom: 2px;
+    text-align: center;
+}
+
+.logo-mini {
+    width: clamp(120px, 26vw, 172px);
+    height: auto;
+    display: block;
+    filter: drop-shadow(0 3px 10px rgba(0, 0, 0, .25));
+}
+
+.sub {
+    color: #c8d7f0;
+    font-size: 12px;
+    letter-spacing: .2px;
+    opacity: .85;
+}
+
+/* ===== Campos ===== */
+.field {
+    width: 100%;
+}
+
+.lbl {
+    color: #a8b6d3;
+    font-size: 12px;
+    display: block;
+    margin: 4px 2px 6px;
+}
+
+/* Input ocupa TODO el ancho interno de la card */
+.input-mini {
+    width: 100%;
+    height: clamp(38px, 6vh, 46px);
+    background: color-mix(in srgb, var(--panel-2) 92%, white 8%);
+    border: 1px solid color-mix(in srgb, var(--border) 85%, transparent);
+    border-radius: var(--radius-sm);
+    color: var(--text);
+    padding: 9px 12px;
+    outline: none;
+    font-size: 16px;
+    line-height: 1.25;
+    transition: border-color .18s ease, box-shadow .18s ease, background .18s ease, transform .06s ease;
+}
+
+.input-mini:hover {
+    border-color: color-mix(in srgb, var(--zentrik) 35%, var(--border));
+}
+
+.input-mini:focus {
+    border-color: var(--zentrik);
+    box-shadow: var(--ring);
+    background: color-mix(in srgb, var(--panel-2) 85%, white 15%);
+}
+
+.input-mini:active {
+    transform: translateY(1px);
+}
+
+.input-mini::placeholder {
+    color: var(--muted);
+}
+
+/* ===== Teclado de turnos — una sola fila y FULL WIDTH ===== */
+.turn-grid {
+    display: grid;
+    grid-auto-flow: column;
+    /* una fila */
+    grid-auto-columns: 1fr;
+    /* cada tecla ocupa la misma fracción del ancho */
+    gap: 10px;
+    width: 100%;
+    /* ocupa todo el ancho de la card */
+    align-items: stretch;
+}
+
+.turn-grid .kbd-opt {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.turn-grid .kbd-lbl {
+    width: 100%;
+    height: clamp(36px, 5.5vh, 44px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid #e6edf7;
+    color: #e6edf7;
+    background: transparent;
+    border-radius: 10px;
+    font-weight: 800;
+    font-size: 15px;
+    cursor: pointer;
+    user-select: none;
+    transition: transform .06s ease, border-color .2s ease, background .2s ease, color .2s ease, box-shadow .2s ease;
+}
+
+.turn-grid .kbd-lbl:hover {
+    transform: translateY(-1px);
+    border-color: var(--zentrik);
+    box-shadow: 0 6px 14px rgba(54, 166, 255, .15);
+}
+
+.turn-grid .kbd-lbl:active {
+    transform: translateY(0);
+}
+
+.turn-grid .kbd-opt:checked+.kbd-lbl {
+    background: var(--zentrik);
+    color: #051020;
+    border-color: var(--zentrik);
+    box-shadow: 0 8px 22px rgba(54, 166, 255, .28);
+}
+
+/* ===== Botón principal — full width ===== */
+.btn-mini {
+    width: 100%;
+    height: clamp(42px, 7vh, 50px);
+    border-radius: 12px;
+    border: 1px solid color-mix(in srgb, var(--zentrik) 70%, black 10%);
+    cursor: pointer;
+    font-weight: 800;
+    font-size: 16px;
+    background: linear-gradient(180deg, var(--zentrik) 0%, var(--zentrik-600) 100%);
+    color: #041221;
+    box-shadow: 0 10px 28px color-mix(in srgb, var(--zentrik) 32%, transparent);
+    transition: transform .06s ease, filter .18s ease, box-shadow .2s ease;
+}
+
+.btn-mini:hover {
+    filter: saturate(1.06) brightness(1.02);
+    transform: translateY(-1px);
+}
+
+.btn-mini:active {
+    transform: translateY(0);
+}
+
+.btn-mini.is-loading {
+    opacity: .6;
+    pointer-events: none;
+}
+
+/* Mensaje de error/info */
+.msg-mini {
+    min-height: 18px;
+    color: #ff6a95;
+    width: 100%;
+    text-align: center;
+    font-size: 13px;
+}
+
+/* ===== Ajustes de altura (teclado virtual) ===== */
+@media (max-height: 540px) {
+    .login-card {
+        transform: scale(.96);
+    }
+}
+
+@media (max-height: 500px) {
+    .login-card {
+        transform: scale(.92);
+    }
+}
+
+/* ===== Accesibilidad: reduce motion ===== */
+@media (prefers-reduced-motion: reduce) {
+
+    .screen--login::before,
+    .screen--login::after,
+    .login-card,
+    .login-card::after {
+        animation: none !important;
+    }
+
+    .login-card {
+        transform: none !important;
+        opacity: 1;
+    }
+}
+
+/* ===== Modal Glass ===== */
+.modal {
+    position: fixed;
+    inset: 0;
+    display: none;
+    /* .open -> display:flex */
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    z-index: 9999;
+    /* por encima del login-card */
+    background: radial-gradient(1200px 600px at 50% -10%, rgba(0, 0, 0, .35), transparent),
+        rgba(4, 8, 16, .45);
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+}
+
+.modal.open {
+    animation: fadeIn .12s ease-out;
+}
+
+.modal__card {
+    width: min(480px, calc(100% - 32px));
+    border-radius: 20px;
+    padding: 18px 20px 16px;
+    background: rgba(24, 28, 40, 0.55);
+    border: 1px solid rgba(255, 255, 255, .12);
+    box-shadow:
+        0 24px 60px rgba(0, 0, 0, .55),
+        inset 0 1px 0 rgba(255, 255, 255, .06);
+    color: #eaf2ff;
+    backdrop-filter: blur(14px) saturate(140%);
+    -webkit-backdrop-filter: blur(14px) saturate(140%);
+}
+
+.modal__title {
+    margin: 0 0 .25rem;
+    font-size: 1.05rem;
+    font-weight: 700;
+    letter-spacing: .2px;
+    color: #ffffff;
+}
+
+.modal__text {
+    margin: 0 0 1rem;
+    font-size: .95rem;
+    line-height: 1.35;
+    color: rgba(255, 255, 255, .92);
+    word-break: break-word;
+}
+
+.modal__actions {
+    display: flex;
+    gap: .5rem;
+    justify-content: flex-end;
+}
+
+.modal .btn-mini {
+    min-width: 120px;
+}
+
+/* Glass helper (por si quieres reutilizar) */
+.glass {
+    background: rgba(24, 28, 40, 0.55);
+    border: 1px solid rgba(255, 255, 255, .12);
+    backdrop-filter: blur(14px) saturate(140%);
+    -webkit-backdrop-filter: blur(14px) saturate(140%);
+    box-shadow:
+        0 24px 60px rgba(0, 0, 0, .55),
+        inset 0 1px 0 rgba(255, 255, 255, .06);
+}
+
+/* Animaciones */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+.pop-in {
+    animation: pop .16s cubic-bezier(.2, .8, .2, 1);
+}
+
+@keyframes pop {
+    from {
+        transform: translateY(6px) scale(.98);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+    }
+}
+
+/* Evita scroll del body cuando hay modal */
+body.has-modal {
+    overflow: hidden;
+}

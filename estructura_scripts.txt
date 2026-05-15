@@ -1,0 +1,50 @@
+rcn-remallado/
+├─ sql/
+│  ├─ 01_schema.sql
+│  ├─ 02_stored_procs.sql
+│  └─ 99_samples.sql
+├─ server/
+│  ├─ package.json
+│  └─ src/
+│     ├─ server.js
+│     ├─ app.js
+│     ├─ config/
+│     │  ├─ env.js
+│     │  └─ db.js
+│     ├─ lib/
+│     │  ├─ jwt.js
+│     │  └─ ws.js
+│     ├─ middlewares/
+│     │  └─ auth.js
+│     ├─ features/
+│     │  ├─ auth/                      # login + cambio de rol (cosas comunes)
+│     │  │  ├─ routes.js               # /api/v1/login, /api/v1/rol
+│     │  │  └─ service.js
+│     │  ├─ remallado/                 # FLUJO REMALLADO
+│     │  │  ├─ routes.js               # /api/v1/remallado/*
+│     │  │  ├─ service.js              # crear parte, ajustar detalle
+│     │  │  └─ repo.js                 # queries SQL específicos (opcional)
+│     │  ├─ revision/                  # (vacío por ahora; listo para crecer)
+│     │  │  ├─ routes.js
+│     │  │  ├─ service.js
+│     │  │  └─ repo.js
+│     │  └─ ext/                       # lecturas a APPSHEET001 (RRHH, fallas)
+│     │     └─ service.js
+│     ├─ routes.js                     # importa y monta todas las routes por feature
+│     └─ public/
+│        ├─ index.html                 # redirect a login.html
+│        ├─ login.html
+│        ├─ role.html
+│        ├─ remallado.html
+│        ├─ resumen.html
+│        ├─ css/
+│        │  └─ app.css
+│        └─ js/
+│           ├─ api.js
+│           ├─ auth.js
+│           ├─ ws.js
+│           ├─ login.js
+│           ├─ role.js
+│           ├─ remallado.js
+│           └─ resumen.js
+└─ .env

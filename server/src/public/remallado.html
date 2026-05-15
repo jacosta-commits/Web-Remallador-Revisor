@@ -1,0 +1,321 @@
+<!doctype html>
+<html lang="es">
+
+<head>
+    <script>
+        if (location.protocol === 'https:') {
+            location.replace('http://' + location.host + location.pathname + location.search + location.hash);
+        }
+    </script>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>ZENTRIK · Remallador</title>
+    <link rel="stylesheet" href="/css/base.css">
+    <link rel="stylesheet" href="/css/layout.css">
+    <link rel="stylesheet" href="/css/components.css">
+    <link rel="stylesheet" href="/css/pages/remallado.css">
+
+    <!-- Estilos mínimos para flecha y menú -->
+    <style>
+        .icon-btn {
+            appearance: none;
+            border: 0;
+            background: transparent;
+            width: 36px;
+            height: 36px;
+            border-radius: 999px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: #fff;
+            opacity: .9;
+            transition: background .2s ease, transform .08s ease, opacity .2s ease;
+        }
+
+        .icon-btn:hover {
+            background: rgba(255, 255, 255, .08);
+            opacity: 1;
+        }
+
+        .icon-btn:active {
+            transform: translateY(1px) scale(.98);
+        }
+
+        .icon-btn svg {
+            width: 20px;
+            height: 20px;
+            display: block;
+        }
+
+        .menu-anchor {
+            position: relative;
+        }
+
+        .menu-panel {
+            position: absolute;
+            right: 0;
+            top: 100%;
+            margin-top: 8px;
+            min-width: 220px;
+            background: rgba(17, 17, 22, .98);
+            border: 1px solid rgba(255, 255, 255, .08);
+            border-radius: 12px;
+            padding: 6px;
+            box-shadow: 0 6px 32px rgba(0, 0, 0, .45);
+            backdrop-filter: blur(6px);
+            display: none;
+            /* se mostrará vía JS */
+            z-index: 30;
+        }
+
+        .menu-panel.open {
+            display: flex;
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        .menu-item {
+            width: 100%;
+            text-align: left;
+            background: transparent;
+            border: 0;
+            color: #fff;
+            padding: 10px 12px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 14px;
+            display: block;
+            /* fuerza bloque: se apilan en columna */
+            width: 100%;
+        }
+
+        .menu-panel::before {
+            content: "";
+            position: absolute;
+            top: -8px;
+            right: 14px;
+            /* ajusta para que mire al botón ⋮ */
+            width: 12px;
+            height: 12px;
+            background: rgba(17, 17, 22, .98);
+            border-left: 1px solid rgba(255, 255, 255, .08);
+            border-top: 1px solid rgba(255, 255, 255, .08);
+            transform: rotate(45deg);
+            z-index: -1;
+            border-radius: 2px;
+        }
+
+        .menu-item:hover {
+            background: rgba(255, 255, 255, .08);
+        }
+
+        .menu-sep {
+            height: 1px;
+            background: rgba(255, 255, 255, .08);
+            margin: 6px 0;
+        }
+
+        /* Modal Observaciones: textarea a pantalla cómoda */
+        #obsModal .box {
+            max-width: 720px;
+            width: 92vw;
+        }
+
+        #obsText {
+            min-height: 140px;
+            resize: vertical;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="page">
+        <header class="header">
+            <div class="container row">
+
+                <div class="logo" style="display:flex;align-items:center;gap:10px;">
+                    <!-- Flecha de volver -->
+                    <button id="btnBack" class="icon-btn" title="Volver" aria-label="Volver">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <polyline points="15 18 9 12 15 6"></polyline>
+                        </svg>
+                    </button>
+                    <img src="/img/ZENTRIK.png" alt="ZENTRIK" style="height:26px;display:block;" />
+                </div>
+
+                <div class="title">REMALLADO</div>
+
+                <div class="right">
+                    <!-- ÚNICO BOTÓN: alterna Enviar/Salir -->
+                    <button id="btnMain" class="btn small warn">Salir</button>
+
+                    <!-- Botón de menú (tres puntitos) -->
+                    <div class="menu-anchor">
+                        <button id="btnMore" class="icon-btn" title="Más opciones" aria-label="Más opciones">
+                            <!-- more-vertical -->
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <circle cx="12" cy="5" r="1"></circle>
+                                <circle cx="12" cy="12" r="1"></circle>
+                                <circle cx="12" cy="19" r="1"></circle>
+                            </svg>
+                        </button>
+
+                        <!-- Panel del menú -->
+                        <div id="moreMenu" class="menu-panel">
+                            <!-- FULL: Observaciones -->
+                            <button id="miObserv" class="menu-item" data-scope="full">Observaciones</button>
+                            <!-- FULL: Resumen de falla (otros) -->
+                            <button id="miResFalla" class="menu-item" data-scope="full">Resumen de falla de
+                                lote</button>
+                            <div class="menu-sep"></div>
+                            <!-- LOTE: Resumen del día -->
+                            <a id="miResumenDia" class="menu-item" data-scope="lote" href="/resumen.html">Resumen del
+                                día</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <main class="container">
+            <div class="grid">
+                <div class="card" id="remCard">
+                    <div class="grid" style="grid-template-columns: 1fr;">
+
+                        <!-- Paso 1 -->
+                        <div class="grid" id="row-lote" style="grid-template-columns: 1fr;">
+                            <label id="lblLote" style="display:none;">N° DE LOTE</label>
+                            <input id="lotcod" class="input" placeholder="N° de lote" />
+                        </div>
+
+                        <!-- Paso 2 -->
+                        <div class="grid" id="row-prod" style="grid-template-columns: 1fr; display:none;">
+                            <input id="prodnom" class="input" placeholder="Nombre del producto (opcional)" disabled />
+                            <input id="otcod" class="input" placeholder="Ord. de Trabajo (opcional)" disabled style="margin-top: 0.5rem;" />
+                        </div>
+
+                        <!-- (LEGACY oculto) Observaciones inline ya no se usa: mantenido para compat del JS actual -->
+                        <div class="grid" id="row-obs" style="grid-template-columns: 1fr; display:none;">
+                            <textarea id="observ" class="input" placeholder="Observaciones (opcional)" rows="2"
+                                maxlength="500" style="resize:vertical; min-height:64px;"></textarea>
+                            <small id="obsCount" class="muted" style="justify-self:end; margin-top:6px;">0/500</small>
+                        </div>
+
+                        <div class="grid" id="sec-ops"
+                            style="grid-template-columns: 1fr 1fr auto; align-items:end; display:none;">
+                            <div>
+                                <label>COD. FALLA</label>
+                                <input id="codfal" class="input" placeholder="Ej. 9" inputmode="numeric" />
+                            </div>
+                            <div>
+                                <label>CANT/YARD</label>
+                                <input id="cantidad" class="input" placeholder="Ej. 10" inputmode="numeric"
+                                    pattern="\d*" maxlength="5" />
+                            </div>
+                            <button id="btnAdd" class="btn primary square" title="Agregar">+</button>
+                        </div>
+
+                        <!-- Nombre/Tipo de Falla (solo lectura) -->
+                        <div class="grid" id="row-tipo"
+                            style="grid-template-columns: 1fr; margin-top: 6px; display:none;">
+                            <input id="tipoFalla" class="input" placeholder="TIPO DE FALLA" disabled />
+                        </div>
+
+                        <div class="card" id="sec-table" style="padding:0; display:none;">
+
+                            <table class="table" id="tabla">
+                                <thead>
+                                    <tr>
+                                        <th>Nombre Falla</th>
+                                        <th style="width:50px">Cant/Yard</th>
+                                        <th style="width:60px">Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+
+                        <!-- (LEGACY oculto) botones inferiores ya no se usan -->
+                        <div class="grid" id="sec-bottom" style="grid-template-columns: 1fr; display:none;">
+                            <button id="btnResFalla" class="btn" style="display:none;">Resumen de falla</button>
+                        </div>
+                        <div class="grid" id="sec-bottom-lote" style="grid-template-columns: 1fr; display:none;">
+                            <a class="btn" href="/resumen.html" style="display:none;">Resumen del día</a>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer class="footer" id="foot"></footer>
+    </div>
+
+    <!-- Modal Resumen de Falla (otros) -->
+    <div class="modal" id="modal">
+        <div class="shade" data-close></div>
+        <div class="box">
+            <button class="btn small close" data-close>✕</button>
+            <h3>Resumen de falla</h3>
+            <div id="resumenBox" class="card" style="padding:0; overflow:auto; max-height:60vh;">
+                <table class="table" id="tablaResumen">
+                    <thead>
+                        <tr>
+                            <th>Tipo Falla</th>
+                            <th>Cantidad/Yarda</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+            <div class="sp"></div>
+            <button class="btn" data-close>Volver</button>
+        </div>
+    </div>
+
+    <!-- Nuevo Modal: Observaciones -->
+    <div class="modal" id="obsModal">
+        <div class="shade" data-close></div>
+        <div class="box">
+            <button class="btn small close" data-close>✕</button>
+            <h3>Observaciones</h3>
+            <div class="grid" style="grid-template-columns: 1fr;">
+                <textarea id="obsText" class="input" placeholder="Escribe tus observaciones aquí…"
+                    maxlength="500"></textarea>
+                <small id="obsCountModal" class="muted" style="justify-self:end; margin-top:6px;">0/500</small>
+            </div>
+            <div class="sp"></div>
+            <div class="grid" style="grid-template-columns: auto auto 1fr;">
+                <button id="btnObsClear" class="btn ghost small">Limpiar</button>
+                <span></span>
+                <div style="justify-self:end; display:flex; gap:8px;">
+                    <button class="btn ghost" data-close>Cancelar</button>
+                    <button id="btnObsSave" class="btn">Guardar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de alerta simple -->
+    <div class="modal" id="alertModal">
+        <div class="shade" data-close></div>
+        <div class="box">
+            <button class="btn small close" data-close>✕</button>
+            <h3>Atención</h3>
+            <p id="alertText">Este código no existe</p>
+            <div class="sp"></div>
+            <button class="btn" data-close>Aceptar</button>
+        </div>
+    </div>
+
+    <script src="/js/auth.js"></script>
+    <script src="/js/ws.js"></script>
+    <script src="/js/api.js"></script>
+    <script src="/js/guard.js"></script>
+    <script type="module" src="/js/remallado.js"></script>
+</body>
+
+</html>

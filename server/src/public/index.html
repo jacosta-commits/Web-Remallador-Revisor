@@ -1,0 +1,10 @@
+<!doctype html>
+<meta charset="utf-8">
+<script>
+    // Garantiza que siempre aterrices en HTTP
+    if (location.protocol === 'https:') {
+        location.replace('http://' + location.host + '/login.html');
+    } else {
+        location.replace('/login.html');
+    }
+</script>

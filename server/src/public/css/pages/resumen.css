@@ -1,0 +1,9 @@
+/* La tabla del resumen queda dentro de la tarjeta con scroll interno */
+.card .table-wrap,
+.card[style*="overflow:auto"] {
+    max-height: 66vh;
+}
+
+#tablaDia {
+    font-size: 13px
+}

@@ -1,0 +1,215 @@
+/* ==========================================================================
+   ROLE (selección de rol) — centrado total, moderno y sin scroll
+   Depende de variables de base.css (colores, radios, sombras)
+   ========================================================================== */
+
+:root {
+    /* usa la misma altura que tu topbar del HTML */
+    --topbar-h: 46px;
+}
+
+/* ===== Barra superior ===== */
+.role-topbar {
+    position: sticky;
+    top: 0;
+    height: var(--topbar-h);
+    display: flex;
+    align-items: center;
+    background: linear-gradient(180deg, #0f1b2d 0%, color-mix(in srgb, #0f1b2d 85%, #091224) 100%);
+    border-bottom: 1px solid rgba(255, 255, 255, .08);
+    backdrop-filter: saturate(1.1);
+    z-index: 10;
+}
+
+.brand-top-left {
+    height: 20px;
+    margin-left: 12px;
+    opacity: .98;
+    display: block;
+    filter: drop-shadow(0 1px 0 rgba(255, 255, 255, .05));
+}
+
+/* ===== ZONA CENTRAL (usa tu <main class="screen screen--center">) ===== */
+/* centrar en toda la pantalla menos la topbar */
+.screen {
+    min-height: calc(100svh - var(--topbar-h));
+    display: grid;
+    place-items: center;
+    align-content: center;
+    /* asegura centrado vertical aunque el contenido sea bajo */
+    justify-items: center;
+    /* centrado horizontal */
+    padding: clamp(12px, 3vw, 24px);
+}
+
+.screen--center {
+    /* alias explícito por si tu HTML confía en él */
+    display: grid;
+    place-items: center;
+}
+
+/* fallback por si en algún momento usas .role-wrap */
+.role-wrap {
+    min-height: calc(100svh - var(--topbar-h));
+    display: grid;
+    place-items: center;
+    padding: clamp(12px, 3vw, 24px);
+}
+
+/* ===== Caja de opciones ===== */
+.role-box {
+    width: clamp(300px, 92vw, 520px);
+    display: grid;
+    gap: clamp(12px, 2.4vh, 18px);
+    background: linear-gradient(180deg, color-mix(in srgb, var(--panel) 94%, #fff 6%), var(--panel-2));
+    border: 1px solid color-mix(in srgb, var(--border) 70%, #d9e6ff 18%);
+    border-radius: var(--radius);
+    padding: clamp(12px, 3vw, 18px);
+    box-shadow:
+        0 10px 24px rgba(0, 0, 0, .22),
+        0 2px 8px rgba(0, 0, 0, .15),
+        inset 0 1px 0 rgba(255, 255, 255, .06);
+    transform-origin: center;
+    animation: roleBoxIn .22s cubic-bezier(.2, .65, .2, 1) both;
+}
+
+@keyframes roleBoxIn {
+    from {
+        transform: translateY(6px) scale(.985);
+        opacity: .0;
+    }
+
+    to {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+    }
+}
+
+/* Si algún día quieres 2 columnas para muchos roles */
+.role-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+}
+
+@media (min-width:520px) {
+    .role-grid.two-cols {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+/* ===== Botones de rol ===== */
+.btn-role {
+    --btn-bg: #0f1b2d;
+    --btn-bd: #d7e7ff;
+    --btn-fg: #eaf1ff;
+
+    height: 48px;
+    border-radius: 12px;
+    background: var(--btn-bg);
+    color: var(--btn-fg);
+    border: 2px solid var(--btn-bd);
+    font-weight: 800;
+    font-size: 16px;
+    letter-spacing: .2px;
+    cursor: pointer;
+    user-select: none;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+
+    position: relative;
+    isolation: isolate;
+    transition:
+        transform .08s ease,
+        box-shadow .18s ease,
+        border-color .18s ease,
+        background .18s ease,
+        color .18s ease,
+        filter .18s ease;
+}
+
+/* Glow radial */
+.btn-role::after {
+    content: "";
+    position: absolute;
+    inset: -2px;
+    border-radius: inherit;
+    background: radial-gradient(220px 220px at var(--mx, 50%) var(--my, 50%), rgba(255, 255, 255, .18), transparent 62%);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .25s ease;
+}
+
+.btn-role:hover::after {
+    opacity: .75;
+}
+
+/* Estados */
+.btn-role:hover {
+    border-color: color-mix(in srgb, var(--zentrik) 70%, #fff 20%);
+    filter: saturate(1.06);
+}
+
+.btn-role:focus-visible {
+    outline: none;
+    box-shadow: var(--ring);
+}
+
+.btn-role:active {
+    transform: translateY(1px) scale(.995);
+}
+
+/* Ripple sin JS */
+.btn-role:active::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: radial-gradient(120px 120px at var(--mx, 50%) var(--my, 50%), rgba(255, 255, 255, .18), transparent 60%);
+    opacity: 1;
+    animation: rippleOut .35s ease forwards;
+}
+
+@keyframes rippleOut {
+    to {
+        opacity: 0;
+        transform: scale(1.05);
+    }
+}
+
+/* Si capturas el mouse por JS para centrar el brillo (opcional) */
+.btn-role:hover,
+.btn-role:active {
+    --mx: var(--_mx, 50%);
+    --my: var(--_my, 50%);
+}
+
+/* Variantes opcionales */
+.btn-role.rm {
+    --btn-bg: linear-gradient(180deg, #13243e 0%, #102033 100%);
+}
+
+.btn-role.rv {
+    --btn-bg: linear-gradient(180deg, #132e2a 0%, #0f2522 100%);
+}
+
+/* Texto auxiliar */
+.role-hint {
+    text-align: center;
+    font-size: 12.5px;
+    color: var(--muted);
+}
+
+/* ===== Accesibilidad ===== */
+@media (prefers-reduced-motion: reduce) {
+
+    .btn-role,
+    .btn-role::after,
+    .btn-role::before {
+        transition: none !important;
+        animation: none !important;
+    }
+}

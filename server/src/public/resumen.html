@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="es">
+
+<head>
+  <script>
+    if (location.protocol === 'https:') {
+      location.replace('http://' + location.host + location.pathname + location.search + location.hash);
+    }
+  </script>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ZENTRIK · Resumen</title>
+  <link rel="stylesheet" href="/css/base.css">
+  <link rel="stylesheet" href="/css/layout.css">
+  <link rel="stylesheet" href="/css/components.css">
+  <link rel="stylesheet" href="/css/pages/resumen.css">
+</head>
+
+<body>
+  <div class="page">
+    <header class="header">
+      <div class="container row">
+        <div class="logo" style="display:flex;align-items:center;gap:10px;">
+          <!-- Flecha de volver -->
+          <button id="btnBack" class="icon-btn" title="Volver" aria-label="Volver">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round" aria-hidden="true">
+              <polyline points="15 18 9 12 15 6"></polyline>
+            </svg>
+          </button>
+          <img src="/img/ZENTRIK.png" alt="ZENTRIK" style="height:26px;display:block;" />
+        </div>
+
+        <div class="title">Resumen del día</div>
+      </div>
+    </header>
+
+
+    <main class="container">
+      <div class="card" style="padding:0; overflow:auto;">
+        <table class="table" id="tablaLotes">
+          <thead>
+            <tr>
+              <th>Lote</th>
+              <th>Falla</th>
+              <th>Yarda</th>
+              <th>Total</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </main>
+
+    <footer class="footer" id="foot"></footer>
+  </div>
+
+  <!-- Modal: Detalle del lote (solo mi sesión) -->
+  <div class="modal" id="modalDet">
+    <div class="shade" data-close></div>
+    <div class="box">
+      <button class="btn small close" data-close>✕</button>
+      <!-- Título será SOLO el N° de Lote -->
+      <h3 id="detTitulo"></h3>
+      <div class="card" style="padding:0; overflow:auto; max-height:60vh;">
+        <table class="table" id="tablaDet">
+          <thead>
+            <tr>
+              <th>Tipo Falla</th>
+              <th>Falla/Yarda</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <div class="sp"></div>
+      <button class="btn" data-close>Volver</button>
+    </div>
+  </div>
+
+  <script src="/js/auth.js"></script>
+  <script src="/js/ws.js"></script>
+  <script src="/js/api.js"></script>
+  <script src="/js/guard.js"></script>
+  <script type="module" src="/js/resumen.js"></script>
+</body>
+
+</html>

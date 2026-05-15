@@ -1,0 +1,573 @@
+/* ==========================================================================
+   COMPONENTS • ZENTRIK
+   Estilos compactos, responsivos y con animaciones sutiles
+   Dependen de variables definidas en base.css (colores, radios, sombras)
+   ========================================================================== */
+
+/* ====== Utilidades pequeñas ====== */
+.muted {
+    color: var(--muted)
+}
+
+.sp {
+    height: 10px
+}
+
+.hr {
+    height: 1px;
+    background: var(--border);
+    border: 0;
+    margin: 8px 0
+}
+
+.hidden {
+    display: none !important
+}
+
+.wrap {
+    white-space: normal;
+    overflow-wrap: anywhere;
+    word-break: break-word
+}
+
+/* ====== Tarjetas (cards) ====== */
+.card {
+    background: linear-gradient(180deg, color-mix(in srgb, var(--panel) 96%, #fff 4%), var(--panel-2));
+    border: 1px solid color-mix(in srgb, var(--border) 85%, transparent);
+    border-radius: var(--radius, 16px);
+    padding: 12px;
+    box-shadow: 0 10px 24px rgba(0, 0, 0, .22), 0 2px 8px rgba(0, 0, 0, .15), inset 0 1px 0 rgba(255, 255, 255, .05);
+    backdrop-filter: saturate(1.1);
+}
+
+/* ====== Botones ====== */
+.btn {
+    --btn-bg: var(--panel);
+    --btn-fg: var(--text);
+    --btn-bd: var(--border);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 10px 12px;
+    border: 1px solid var(--btn-bd);
+    background: var(--btn-bg);
+    color: var(--btn-fg);
+    border-radius: var(--radius-sm, 12px);
+    cursor: pointer;
+    user-select: none;
+    position: relative;
+    isolation: isolate;
+    transition: transform .06s ease, background .2s ease, border-color .2s ease, box-shadow .2s ease, color .2s ease, opacity .2s ease;
+}
+
+.btn::after {
+    content: "";
+    position: absolute;
+    inset: -2px;
+    border-radius: inherit;
+    background: radial-gradient(240px 240px at var(--mx, 50%) var(--my, 50%), rgba(255, 255, 255, .12), transparent 60%);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .25s ease
+}
+
+.btn:hover::after {
+    opacity: .6
+}
+
+.btn:active {
+    transform: translateY(1px) scale(.995)
+}
+
+.btn.is-loading {
+    opacity: .6;
+    pointer-events: none
+}
+
+.btn.block {
+    width: 100%
+}
+
+.btn.small {
+    padding: 7px 9px;
+    border-radius: 10px;
+    font-size: 14px
+}
+
+.btn.square {
+    width: 36px;
+    min-width: 36px;
+    height: 36px;
+    padding: 0
+}
+
+.btn.ghost {
+    --btn-bg: var(--panel-2);
+    --btn-bd: color-mix(in srgb, var(--border) 80%, transparent)
+}
+
+.btn.primary {
+    --btn-bg: linear-gradient(180deg, var(--zentrik) 0%, var(--zentrik-600) 100%);
+    --btn-fg: #06121f;
+    --btn-bd: color-mix(in srgb, var(--zentrik) 70%, black 10%);
+    box-shadow: 0 6px 16px color-mix(in srgb, var(--zentrik) 25%, transparent)
+}
+
+.btn.success {
+    --btn-bg: linear-gradient(180deg, #34e89e 0%, #0fb86a 100%);
+    --btn-fg: #052818;
+    --btn-bd: #0ca160;
+    box-shadow: 0 6px 16px rgba(15, 184, 106, .25)
+}
+
+.btn.warn {
+    --btn-bg: linear-gradient(180deg, #ffc24d 0%, #ff9f0f 100%);
+    --btn-fg: #2e1d00;
+    --btn-bd: #cc8400;
+    box-shadow: 0 6px 16px rgba(255, 159, 15, .25)
+}
+
+.btn.danger {
+    --btn-bg: linear-gradient(180deg, #ff7a86 0%, #ff3b4f 100%);
+    --btn-fg: #2a070b;
+    --btn-bd: #cc1d2d;
+    box-shadow: 0 6px 16px rgba(255, 59, 79, .25)
+}
+
+.btn:hover,
+.btn:active {
+    --mx: var(--_mx, 50%);
+    --my: var(--_my, 50%)
+}
+
+.btn:where(:hover, :active) {
+    outline: 0;
+    filter: saturate(1.05)
+}
+
+.btn:focus-visible {
+    box-shadow: var(--ring);
+    outline: none
+}
+
+.btn.add-mouse {
+    --_mx: 50%;
+    --_my: 50%
+}
+
+/* ====== Inputs / selects ====== */
+label {
+    display: block;
+    font-size: 12px;
+    color: #cbd5e1;
+    margin: 4px 0 6px
+}
+
+.input,
+.select {
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    background: var(--panel-2);
+    color: var(--text);
+    font-size: 15px;
+    line-height: 1.25;
+    outline: none;
+    transition: border-color .18s ease, box-shadow .18s ease, background .18s ease;
+}
+
+.input:hover,
+.select:hover {
+    border-color: color-mix(in srgb, var(--zentrik) 35%, var(--border))
+}
+
+.input:focus,
+.select:focus {
+    border-color: var(--zentrik);
+    box-shadow: var(--ring);
+    background: color-mix(in srgb, var(--panel-2) 85%, white 15%)
+}
+
+.input::placeholder {
+    color: var(--muted)
+}
+
+/* ====== Teclas de turno (login) ====== */
+.kbd-row {
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    gap: 8px
+}
+
+.kbd-opt {
+    display: none
+}
+
+.kbd-lbl {
+    text-align: center;
+    padding: 10px 0;
+    border-radius: 10px;
+    background: var(--panel-2);
+    border: 2px solid #e6edf7;
+    color: #e6edf7;
+    font-weight: 800;
+    cursor: pointer;
+    user-select: none;
+    transition: transform .05s ease, border-color .2s ease, background .2s ease
+}
+
+.kbd-lbl:hover {
+    transform: translateY(-1px)
+}
+
+.kbd-opt:checked+.kbd-lbl {
+    background: var(--zentrik);
+    color: #051020;
+    border-color: var(--zentrik)
+}
+
+/* ====== Pills ====== */
+.pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 2px 8px;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    font-size: 12px;
+    color: #cbd5e1;
+    background: color-mix(in srgb, var(--panel-2) 80%, transparent)
+}
+
+/* ====== Tablas (con líneas y alto contraste en header) ====== */
+.table {
+    --gridline: rgba(255, 255, 255, .10);
+    --gridline-strong: rgba(255, 255, 255, .16);
+
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    font-size: 13.5px;
+    table-layout: auto;
+    border: 1px solid var(--gridline-strong);
+    border-radius: 12px;
+    overflow: hidden;
+    /* redondeo visible */
+}
+
+/* celdas */
+.table th,
+.table td {
+    padding: 8px 10px;
+    vertical-align: middle;
+    border-bottom: 1px solid var(--gridline);
+}
+
+/* separadores verticales entre columnas */
+.table th+th,
+.table td+td {
+    box-shadow: inset 1px 0 var(--gridline);
+}
+
+/* encabezados centrados y más claros */
+.table thead th {
+    text-align: center;
+    font-weight: 700;
+    letter-spacing: .2px;
+    color: #f1f4ff;
+    /* más claro para que “Lote” se vea */
+    background: linear-gradient(180deg, #162344 0%, #111b34 100%);
+    position: sticky;
+    top: 0;
+    z-index: 1;
+}
+
+/* filas */
+.table tbody tr:nth-child(odd) {
+    background: rgba(255, 255, 255, .02)
+}
+
+.table tbody tr:hover {
+    background: color-mix(in srgb, var(--zentrik) 8%, transparent)
+}
+
+/* alineaciones: primera col a la izq (nombres), resto centradas */
+.table td:first-child {
+    text-align: left;
+}
+
+.table td:not(:first-child) {
+    text-align: center;
+    white-space: nowrap;
+}
+
+/* acciones centradas */
+.table .actions {
+    display: flex;
+    gap: 6px;
+    justify-content: center;
+    align-items: center
+}
+
+/* enlaces dentro de tabla (ej. Lote) más legibles */
+.table a {
+    color: var(--zentrik);
+    font-weight: 600;
+    text-decoration: none
+}
+
+.table a:hover {
+    text-decoration: underline
+}
+
+/* ====== Modal ====== */
+.modal {
+    position: fixed;
+    inset: 0;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 50
+}
+
+.modal.open {
+    display: flex
+}
+
+.modal .shade {
+    position: absolute;
+    inset: 0;
+    background: #0008;
+    backdrop-filter: blur(2px);
+    animation: shadeIn .2s ease both
+}
+
+@keyframes shadeIn {
+    from {
+        opacity: 0
+    }
+
+    to {
+        opacity: 1
+    }
+}
+
+.modal .box {
+    position: relative;
+    width: min(640px, 96vw);
+    max-height: 85vh;
+    overflow: auto;
+    background: linear-gradient(180deg, var(--panel), color-mix(in srgb, var(--panel-2) 80%, transparent));
+    border: 1px solid var(--gridline-strong);
+    border-radius: var(--radius, 16px);
+    padding: 12px 14px 14px;
+    box-shadow: var(--shadow-lg);
+    transform: translateY(8px) scale(.98);
+    opacity: 0;
+    animation: modalIn .22s cubic-bezier(.2, .65, .2, 1) forwards;
+}
+
+@keyframes modalIn {
+    to {
+        transform: translateY(0) scale(1);
+        opacity: 1
+    }
+}
+
+.modal .box h3 {
+    margin: 0 0 6px;
+    letter-spacing: .2px
+}
+
+.modal .close {
+    position: absolute;
+    right: 10px;
+    top: 10px
+}
+
+/* ====== Responsivo ====== */
+@media (max-width:900px) {
+    .btn {
+        padding: 9px 11px
+    }
+
+    .btn.square {
+        width: 34px;
+        height: 34px
+    }
+
+    .input,
+    .select {
+        padding: 9px 11px;
+        font-size: 14px
+    }
+
+    .table {
+        font-size: 13px
+    }
+}
+
+@media (max-width:600px) {
+    .btn {
+        padding: 8px 10px;
+        font-size: 14px
+    }
+
+    .btn.square {
+        width: 32px;
+        height: 32px
+    }
+
+    .table th,
+    .table td {
+        padding: 7px 8px
+    }
+
+    .modal .box {
+        width: min(560px, 96vw)
+    }
+}
+
+@media (max-width:420px) {
+    .btn {
+        padding: 7px 9px;
+        font-size: 13px
+    }
+
+    .btn.square {
+        width: 30px;
+        height: 30px
+    }
+
+    .input,
+    .select {
+        padding: 8px 10px;
+        font-size: 13.5px
+    }
+
+    .table {
+        font-size: 12.5px
+    }
+}
+
+/* ====== Efecto “pulse” (opcional) ====== */
+@keyframes pulseSoft {
+    0% {
+        box-shadow: 0 0 0 0 color-mix(in srgb, var(--zentrik) 35%, transparent)
+    }
+
+    70% {
+        box-shadow: 0 0 0 10px transparent
+    }
+
+    100% {
+        box-shadow: 0 0 0 0 transparent
+    }
+}
+
+.btn.primary.is-loading {
+    animation: pulseSoft 1.5s ease infinite
+}
+
+/* ====== Sin scroll horizontal por componentes ====== */
+.table,
+.card,
+.modal .box {
+    max-width: 100%
+}
+
+/* === Botón icónico (flecha / tres puntitos) === */
+.icon-btn {
+    appearance: none;
+    border: 0;
+    background: transparent;
+    width: 36px;
+    height: 36px;
+    border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: #fff;
+    opacity: .9;
+    transition: background .2s ease, transform .08s ease, opacity .2s ease;
+}
+
+.icon-btn:hover {
+    background: rgba(255, 255, 255, .08);
+    opacity: 1;
+}
+
+.icon-btn:active {
+    transform: translateY(1px) scale(.98);
+}
+
+.icon-btn svg {
+    width: 20px;
+    height: 20px;
+    display: block;
+}
+
+/* === Menú de tres puntitos === */
+.menu-anchor {
+    position: relative;
+}
+
+.menu-panel {
+    position: absolute;
+    right: 0;
+    top: 100%;
+    margin-top: 8px;
+    min-width: 220px;
+    max-width: min(92vw, 280px);
+    /* nunca desborda pantalla */
+    background: rgba(17, 17, 22, .98);
+    border: 1px solid rgba(255, 255, 255, .08);
+    border-radius: 12px;
+    padding: 6px;
+    box-shadow: 0 6px 32px rgba(0, 0, 0, .45);
+    backdrop-filter: blur(6px);
+    display: none;
+    z-index: 30;
+}
+
+.menu-panel.open {
+    display: block;
+}
+
+.menu-item {
+    width: 100%;
+    text-align: left;
+    background: transparent;
+    border: 0;
+    color: #fff;
+    padding: 10px 12px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.menu-item:hover {
+    background: rgba(255, 255, 255, .08);
+}
+
+.menu-sep {
+    height: 1px;
+    background: rgba(255, 255, 255, .08);
+    margin: 6px 0;
+}
+
+/* En pantallas MUY pequeñas, compacta aún más botones */
+@media (max-width: 420px) {
+    .icon-btn {
+        width: 32px;
+        height: 32px;
+    }
+
+    .header .right .btn.small {
+        padding: 6px 8px;
+        font-size: 13px;
+    }
+}

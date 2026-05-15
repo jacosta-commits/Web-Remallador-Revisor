@@ -1,0 +1,583 @@
+/* ==========================================================================
+   REMALLADO • estilos de página
+   Se apoya en variables de base.css y componentes.css
+   ========================================================================== */
+
+/* Contenedor más ancho en móviles pero sin forzar scroll */
+.container {
+    max-width: clamp(320px, 94vw, 980px);
+}
+
+/* ===== Cabecera: botones pegados y compactos en pantallas pequeñas ===== */
+@media (max-width: 720px) {
+    .header .right {
+        gap: 8px;
+    }
+}
+
+/* ===== Bloque Lote + mini totales ===== */
+/* Lote compacto: input se ajusta al texto y los totales van al costado */
+#row-lote {
+    display: flex !important;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    /* si no entra, salta debajo */
+}
+
+/* El ancho lo manda el contenido (medido en “caracteres”) */
+#row-lote #lotcod {
+    width: auto;
+    /* anula el 100% del .input */
+    inline-size: auto;
+    box-sizing: content-box;
+    /* para que size cuente solo el contenido */
+    min-width: 10px;
+    /* base cómoda (R123456 ≈ 7ch) */
+    max-width: 100%;
+    font-variant-numeric: tabular-nums;
+    /* dígitos más parejos */
+}
+
+/* Ya lo tienes, pero queda perfecto con flex: */
+#miniTotals {
+    display: inline-flex !important;
+    gap: 12px;
+    margin-left: 10px;
+}
+
+
+/* La barrita Falla/Yarda queda en la misma línea del lote */
+#miniTotals {
+    display: inline-flex !important;
+    gap: 12px;
+    align-items: center;
+    margin-left: 10px;
+    transform: translateY(2px);
+    font-weight: 600;
+    letter-spacing: .2px;
+    color: color-mix(in srgb, var(--text) 86%, #fff 14%);
+    opacity: .9;
+}
+
+@media (max-width: 560px) {
+
+    /* En pantallas muy chicas, cae debajo con margen corto */
+    #miniTotals {
+        display: flex !important;
+        margin: 6px 0 0 0;
+        transform: none;
+    }
+}
+
+/* ===== Grid de captura (cod falla / cantidad / +) ===== */
+#sec-ops {
+    grid-template-columns: 1fr 1fr auto !important;
+    align-items: end;
+}
+
+#sec-ops .input {
+    height: 42px;
+}
+
+#btnAdd.btn.square {
+    width: 38px;
+    height: 38px;
+}
+
+/* ===== Tabla principal de captura (#tabla) ===== */
+#tabla {
+    font-size: 13px;
+}
+
+/* tipografía compacta */
+
+/* Encabezados centrados */
+#tabla thead th {
+    text-align: center;
+    border-bottom: 1px solid color-mix(in srgb, var(--border) 90%, #000);
+}
+
+/* Columna 1 (nombre) a la izquierda con posibilidad de salto */
+#tabla td:first-child,
+#tabla th:first-child {
+    text-align: left;
+    white-space: normal;
+}
+
+/* Cantidad y Acciones centrados */
+#tabla td:nth-child(2),
+#tabla th:nth-child(2),
+#tabla td:nth-child(3),
+#tabla th:nth-child(3) {
+    text-align: center;
+    white-space: nowrap;
+}
+
+/* Líneas más visibles entre filas */
+#tabla tbody tr td {
+    border-bottom: 1px solid color-mix(in srgb, var(--border) 85%, #000);
+}
+
+/* Resalte al pasar el mouse */
+#tabla tbody tr:hover {
+    background: color-mix(in srgb, var(--zentrik) 7%, transparent);
+}
+
+/* Altura máxima de tarjetas con scroll interno (si hace falta) */
+.card .table-wrap,
+.card[style*="overflow:auto"] {
+    max-height: 58vh;
+    overflow: auto;
+    border-radius: inherit;
+}
+
+/* Evita que la última fila quede oculta bajo la barra pegada */
+#sec-table .table-wrap {
+    padding-bottom: calc(var(--bottom-h, 64px) + 16px);
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Fila espaciadora al final de la tabla (sin líneas ni fondo) */
+#tabla .spacer-row td {
+    border: 0 !important;
+    background: transparent !important;
+    padding: 0 !important;
+}
+
+/* ===== Botonera inferior (más visible, sin ser chillona) ===== */
+/* Nota: NO se fuerza display aquí para respetar display:none del HTML/JS */
+#sec-bottom,
+#sec-bottom-lote {
+    position: sticky;
+    bottom: 0;
+    z-index: 5;
+    background: linear-gradient(180deg, rgba(14, 18, 30, .94), rgba(10, 14, 24, .94));
+    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(6px);
+    padding: 12px 14px calc(12px + env(safe-area-inset-bottom, 0));
+    margin: 14px -14px -14px;
+    /* estira a los bordes del card */
+    border-top: 1px solid rgba(255, 255, 255, .14);
+    box-shadow: 0 -10px 26px rgba(0, 0, 0, .42);
+    gap: 12px;
+    display: grid;
+    /* sólo si el elemento está visible */
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+}
+
+/* Botones con mayor presencia (contraste y relieve discreto) */
+#sec-bottom .btn,
+#sec-bottom-lote .btn,
+#sec-bottom a.btn,
+#sec-bottom-lote a.btn {
+    height: 46px;
+    font-size: 15px;
+    font-weight: 700;
+    border-radius: 14px;
+    background: color-mix(in srgb, var(--panel-2) 80%, #fff 20%);
+    border-color: rgba(255, 255, 255, .24);
+    box-shadow:
+        inset 0 0 0 1px rgba(255, 255, 255, .10),
+        0 4px 12px rgba(0, 0, 0, .28);
+}
+
+/* “Volver” (ghost) un poco más marcado que el ghost base */
+#sec-bottom .btn.ghost,
+#sec-bottom-lote .btn.ghost {
+    background: color-mix(in srgb, var(--panel-2) 72%, #fff 10%);
+    border-color: rgba(255, 255, 255, .26);
+}
+
+/* Botón derecho con leve acento (sin verde chillón) */
+#sec-bottom .btn:not(.ghost):last-child,
+#sec-bottom-lote .btn:not(.ghost):last-child {
+    background: color-mix(in srgb, var(--panel-2) 85%, var(--zentrik) 15%);
+    color: #e9fff7;
+    box-shadow:
+        inset 0 0 0 2px color-mix(in srgb, var(--zentrik) 60%, transparent),
+        0 4px 14px rgba(0, 0, 0, .30);
+}
+
+/* Hover/active suaves para ambos botones */
+#sec-bottom .btn:hover,
+#sec-bottom-lote .btn:hover {
+    filter: brightness(1.05);
+}
+
+#sec-bottom .btn:active,
+#sec-bottom-lote .btn:active {
+    transform: translateY(1px);
+}
+
+/* Apilar en pantallas muy angostas */
+@media (max-width: 380px) {
+
+    #sec-bottom,
+    #sec-bottom-lote {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ===== Modal: Resumen de falla (otros) ===== */
+#tablaResumen {
+    font-size: 13px;
+}
+
+/* Encabezados centrados y más nítidos */
+#tablaResumen thead th {
+    text-align: center;
+    border-bottom: 1px solid color-mix(in srgb, var(--border) 90%, #000);
+}
+
+/* 1ª col (Tipo Falla) a la izquierda, 2ª col (cantidad) centrada */
+#tablaResumen th:first-child,
+#tablaResumen td:first-child {
+    text-align: left;
+    white-space: normal;
+}
+
+#tablaResumen th:nth-child(2),
+#tablaResumen td:nth-child(2) {
+    text-align: center;
+    white-space: nowrap;
+}
+
+/* Líneas de cuerpo más marcadas */
+#tablaResumen tbody td {
+    border-bottom: 1px solid color-mix(in srgb, var(--border) 85%, #000);
+}
+
+/* ===== Ajustes finos para reducir espacios verticales ===== */
+#remCard .table th,
+#remCard .table td,
+#resumenBox .table th,
+#resumenBox .table td {
+    padding: 6px 8px;
+}
+
+/* ===== Responsivo extra pequeño ===== */
+@media (max-width: 420px) {
+    #sec-ops .input {
+        height: 40px;
+    }
+
+    #btnAdd.btn.square {
+        width: 36px;
+        height: 36px;
+    }
+}
+
+/* ====== Inputs bloqueados (disabled) con tono distinto ====== */
+.input:disabled,
+input:disabled,
+textarea:disabled,
+select:disabled {
+    background: rgba(255, 255, 255, .06);
+    border-color: rgba(255, 255, 255, .15);
+    color: #9fb2c7;
+    cursor: not-allowed;
+    -webkit-text-fill-color: #9fb2c7;
+    opacity: 1;
+}
+
+/* placeholder apagado cuando está disabled */
+input:disabled::placeholder {
+    color: rgba(159, 178, 199, .6);
+}
+
+/* ===== Botonera inferior (más visible, sin ser chillona) ===== */
+/* Nota: NO se fuerza display aquí para respetar display:none del HTML/JS */
+#sec-bottom,
+#sec-bottom-lote {
+    position: sticky;
+    /* SEPARACIÓN REAL DEL FOOTER (+8px de aire) */
+    bottom: calc(var(--footer-h, 0px) + 8px);
+    z-index: 5;
+    background: linear-gradient(180deg, rgba(14, 18, 30, .94), rgba(10, 14, 24, .94));
+    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(6px);
+    padding: 12px 14px calc(12px + env(safe-area-inset-bottom, 0));
+    margin: 14px -14px -14px;
+    border-top: 1px solid rgba(255, 255, 255, .14);
+    box-shadow: 0 -10px 26px rgba(0, 0, 0, .42);
+    gap: 12px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+}
+
+/* Hace que la card ocupe el alto de la pantalla, descontando header y footer */
+#remCard {
+    min-height: calc(100svh - var(--header-h, 0px) - var(--footer-h, 0px) - var(--container-py, 28px));
+    display: flex;
+    overflow: hidden;
+    /* corta cualquier 1px rebelde y evita el scroll global */
+}
+
+/* El contenido interno pasa a columna para poder empujar la botonera abajo */
+#remCard>.grid {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    flex: 1;
+    min-height: 0;
+    /* ← en lugar de min-height: inherit; */
+}
+
+
+/* Empuja la barra inferior al fondo de la card */
+#sec-bottom,
+#sec-bottom-lote {
+    position: sticky;
+    bottom: calc(var(--footer-h, 0px) + 8px);
+    /* se sienta justo sobre el footer */
+    z-index: 5;
+    background: linear-gradient(180deg, rgba(14, 18, 30, .94), rgba(10, 14, 24, .94));
+    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(6px);
+    padding: 12px 14px calc(12px + env(safe-area-inset-bottom, 0));
+    /* Estira a bordes del card SIN sacar el flujo ni “tirar” del final de la página */
+    margin: 12px -12px 0;
+    /* ← antes era 14px -14px -14px */
+    border-top: 1px solid rgba(255, 255, 255, .14);
+    box-shadow: 0 -10px 26px rgba(0, 0, 0, .42);
+    gap: 12px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+}
+
+@media (max-width: 380px) {
+
+    #sec-bottom,
+    #sec-bottom-lote {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Oculta el botón pero mantiene su espacio en el grid */
+.keep-space {
+    visibility: hidden !important;
+    pointer-events: none !important;
+}
+
+/* ===== Evitar scroll global: #remCard ocupa exactamente el alto disponible ===== */
+#remCard {
+    /* en lugar de min-height, usamos height exacto */
+    height: calc(100svh - var(--header-h, 0px) - var(--footer-h, 0px) - var(--container-py, 28px));
+    min-height: 0;
+    /* habilita que los hijos puedan encogerse */
+    display: flex;
+    flex-direction: column;
+    /* columna para repartir alto */
+    overflow: hidden;
+    /* corta desbordes internos (el scroll será dentro de la tabla) */
+}
+
+/* La grilla interna ya la tenías en columna; garantizamos que pueda encoger */
+#remCard>.grid {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    flex: 1;
+    min-height: 0;
+    /* evita que empuje y cree scroll global */
+}
+
+/* La sección de la tabla toma el resto del alto de la card */
+#sec-table {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: 0;
+    /* <- IMPORTANTÍSIMO para permitir scroll interno */
+}
+
+/* El contenedor scrolleable de la tabla ocupa todo el sobrante sin límites de vh */
+#sec-table .table-wrap {
+    flex: 1;
+    min-height: 0;
+    overflow: auto;
+    max-height: none;
+    /* anula el 58vh heredado para este caso */
+    padding-bottom: calc(var(--bottom-h, 64px) + 16px);
+    /* ya lo tenías; mantiene visible la última fila */
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Si en layout.css/components.css existe un max-height para .table-wrap, lo pisamos aquí */
+#remCard .table-wrap {
+    max-height: none;
+    /* refuerzo por especificidad */
+}
+
+#sec-bottom,
+#sec-bottom-lote {
+    position: sticky;
+    bottom: calc(var(--kb-h, 0px) + 8px);
+    /* <- sin footer */
+}
+
+/* Ocultar las barras inferiores cuando el teclado está abierto */
+.kb-open #sec-bottom,
+.kb-open #sec-bottom-lote {
+    display: none !important;
+}
+
+/* Al estar ocultas, el scroll interno de la tabla no debe reservar espacio extra */
+.kb-open #sec-table .table-wrap {
+    padding-bottom: 16px !important;
+}
+
+/* Refuerzo anti-scroll horizontal específico de la página */
+.page,
+.header,
+.header .container,
+.header .row {
+    overflow-x: clip;
+    /* no aparece barra; no afecta al menú (está dentro del header) */
+}
+
+/* ===== Header: fijar 3 puntitos y evitar saltos ===== */
+.header,
+.header .container,
+.header .row {
+    overflow: visible;
+}
+
+/* evita que se corte el menú */
+
+.header .row {
+    min-width: 0;
+}
+
+/* permite que el título recorte con … */
+.header .title {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Ocultar logo y dejar sólo la flecha */
+.header .logo img {
+    display: none;
+}
+
+/* Menú: ancho cómodo, nunca recortado */
+.menu-panel {
+    min-width: 240px;
+    max-width: min(92vw, 320px);
+    white-space: nowrap;
+    z-index: 1000;
+    /* sobre todo */
+    right: 0;
+    left: auto;
+    /* anclado al borde derecho */
+}
+
+/* Botones que “desaparecen” sin colapsar el espacio */
+#btnEnviar.keep-space,
+#btnFin.keep-space {
+    visibility: hidden !important;
+    pointer-events: none !important;
+}
+
+/* ===== Header: fijar 3 puntitos y evitar saltos ===== */
+.header,
+.header .container,
+.header .row {
+    overflow: visible;
+}
+
+/* evita que se corte el menú */
+
+.header .row {
+    min-width: 0;
+}
+
+/* permite que el título recorte con … */
+.header .title {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Ocultar logo y dejar sólo la flecha */
+.header .logo img {
+    display: none;
+}
+
+/* Conservar 3 “slots” fijos: [Enviar] [⋮] [Salir]  */
+.header .right {
+    display: grid !important;
+    grid-auto-flow: column;
+    grid-template-columns: auto auto auto;
+    align-items: center;
+    gap: 8px;
+}
+
+.header .right>* {
+    min-width: 0;
+}
+
+/* === FIX: header con 3 columnas fijas y ⋮ a la derecha === */
+header.header .container .row>.right {
+    display: grid !important;
+    grid-template-columns: auto auto auto !important;
+    grid-auto-flow: column !important;
+    align-items: center !important;
+    justify-content: end !important;
+    gap: 8px !important;
+}
+
+/* Columna fija de cada elemento */
+#btnEnviar {
+    grid-column: 1 !important;
+}
+
+/* izq */
+#btnFin {
+    grid-column: 2 !important;
+}
+
+/* centro */
+.menu-anchor {
+    grid-column: 3 !important;
+}
+
+/* ===== Sólo para la tabla de captura (#sec-table): SIN scroll interno ===== */
+#remCard {
+    height: auto !important;
+    min-height: 0 !important;
+    overflow: visible !important;
+    /* que no recorte el contenido */
+}
+
+#remCard>.grid {
+    flex: initial !important;
+    min-height: 0 !important;
+}
+
+#sec-table {
+    flex: initial !important;
+    /* que no se “estire” como área scroll */
+    min-height: 0 !important;
+    overflow: visible !important;
+    max-height: none !important;
+}
+
+/* Si en algún lado se usa .table-wrap, la anulamos aquí también */
+#sec-table .table-wrap {
+    overflow: visible !important;
+    max-height: none !important;
+    padding-bottom: 0 !important;
+}
+
+/* Cuando el teclado esté abierto no hace falta reservar espacio extra */
+.kb-open #sec-table .table-wrap {
+    padding-bottom: 0 !important;
+}

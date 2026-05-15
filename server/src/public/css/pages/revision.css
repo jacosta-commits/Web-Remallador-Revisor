@@ -1,0 +1,263 @@
+/* ==========================================================================
+   PAGE: REVISIÓN
+   Estilos específicos para /revision.html
+   Depende de base.css + layout.css + components.css
+   ========================================================================== */
+
+/* ===== Filtros ===== */
+.rev-filter-section {
+    margin-bottom: 10px;
+}
+
+.rev-filter-title {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--muted);
+    margin-bottom: 10px;
+    font-weight: 700;
+}
+
+.rev-filter-controls {
+    display: flex;
+    gap: 10px;
+    align-items: flex-end;
+    flex-wrap: wrap;
+}
+
+.rev-filter-field {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-width: 100px;
+}
+
+.rev-filter-field--small {
+    flex: 0 0 90px;
+    min-width: 80px;
+}
+
+/* Fix date input icon for dark theme */
+.rev-filter-field input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(1) brightness(0.8);
+    cursor: pointer;
+}
+
+/* ===== Dropdown wrappers ===== */
+.rev-dropdown {
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid var(--border);
+}
+
+.rev-dropdown + .rev-dropdown {
+    border-top: 1px dashed rgba(31, 43, 69, 0.6);
+    margin-top: 8px;
+    padding-top: 8px;
+}
+
+.rev-dropdown-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.rev-count {
+    font-size: 0.72rem;
+    color: var(--zentrik);
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+/* ===== Búsqueda directa ===== */
+.rev-search-section {
+    margin-bottom: 10px;
+}
+
+.rev-search-row {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.rev-search-row .input {
+    flex: 1;
+}
+
+/* ===== Loading ===== */
+.rev-loading {
+    text-align: center;
+    padding: 30px 0;
+}
+
+.rev-spinner {
+    width: 36px;
+    height: 36px;
+    border: 3px solid rgba(255, 255, 255, 0.1);
+    border-left-color: var(--zentrik);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin: 0 auto 10px;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+.rev-loading p {
+    color: var(--muted);
+    font-size: 0.85rem;
+}
+
+/* ===== Info grid ===== */
+.rev-info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.rev-field {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.rev-field--full {
+    grid-column: span 2;
+}
+
+/* ===== Agregar falla ===== */
+.rev-add-section {
+    margin-bottom: 10px;
+}
+
+.rev-add-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr auto;
+    gap: 10px;
+    align-items: end;
+}
+
+.rev-falla-info {
+    margin-top: 6px;
+    font-size: 0.8rem;
+    color: var(--zentrik);
+    padding: 4px 8px;
+    background: rgba(54, 166, 255, 0.08);
+    border-radius: 6px;
+}
+
+/* ===== Tabla de fallas ===== */
+#faultsTable th {
+    font-size: 0.7rem;
+}
+
+#faultsTable td {
+    font-size: 0.82rem;
+}
+
+#faultsTable .cant-col {
+    text-align: center;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+}
+
+#faultsTable .rev-cant-col {
+    text-align: center;
+    font-weight: 800;
+    color: var(--zentrik);
+    font-variant-numeric: tabular-nums;
+}
+
+/* Fila diferencia: remalle != revision */
+#faultsTable tr.diff-row {
+    background: rgba(255, 176, 32, 0.08);
+}
+
+#faultsTable tr.diff-row:hover {
+    background: rgba(255, 176, 32, 0.14);
+}
+
+/* ===== Botones de acción por fila ===== */
+.rev-row-actions {
+    display: flex;
+    gap: 4px;
+    justify-content: center;
+    align-items: center;
+}
+
+.rev-row-actions .btn {
+    min-width: 28px;
+    width: 28px;
+    height: 28px;
+    padding: 0;
+    font-size: 14px;
+    border-radius: 8px;
+}
+
+/* ===== Acciones finales ===== */
+.rev-actions {
+    display: flex;
+    gap: 10px;
+    margin: 12px 0;
+    flex-wrap: wrap;
+}
+
+.rev-actions .btn {
+    flex: 1;
+    min-width: 140px;
+    padding: 12px;
+    font-weight: 700;
+    font-size: 0.9rem;
+}
+
+/* ===== Observaciones ===== */
+.rev-obs-section {
+    margin-bottom: 10px;
+}
+
+.rev-obs-section textarea {
+    min-height: 60px;
+    resize: vertical;
+}
+
+/* ===== Error ===== */
+.rev-error {
+    text-align: center;
+    color: var(--danger);
+    padding: 20px;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 520px) {
+    .rev-filter-controls {
+        flex-direction: column;
+    }
+
+    .rev-filter-field,
+    .rev-filter-field--small {
+        min-width: 100%;
+        flex: 1;
+    }
+
+    .rev-info-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .rev-field--full {
+        grid-column: span 1;
+    }
+
+    .rev-add-row {
+        grid-template-columns: 1fr 1fr auto;
+    }
+
+    .rev-actions {
+        flex-direction: column;
+    }
+
+    .rev-actions .btn {
+        min-width: 100%;
+    }
+}

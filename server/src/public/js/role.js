@@ -25,6 +25,7 @@
             const { srolcod } = await api.post('/api/rol', { rolcod });
             sessionStorage.setItem('rcn.srolcod', String(srolcod));
             if (rolcod === 'RM') location.href = '/remallado.html';
+            else if (rolcod === 'RV') location.href = '/revision.html';
             else location.href = '/resumen.html';
         } catch (e) {
             alert(e?.message || 'No se pudo cambiar de rol.');

@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import authRoutes from './features/auth/routes.js';
 import remalladoRoutes from './features/remallado/routes.js';
+import revisionRoutes from './features/revision/routes.js';
 import extRoutes from './features/ext/routes.js'; // rutas públicas previas al login
 
 const api = Router();
@@ -9,7 +10,11 @@ const api = Router();
 api.use('/', authRoutes);
 api.use('/', remalladoRoutes);
 
+// Revisión (rol RV)
+api.use('/revision', revisionRoutes);
+
 // Catálogos/consultas externas SIN auth (trabajador, fallas, producto)
 api.use('/ext', extRoutes); // => /api/ext/*
 
 export default api;
+

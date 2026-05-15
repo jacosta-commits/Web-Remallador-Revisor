@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="es">
+
+<head>
+    <script>
+        if (location.protocol === 'https:') {
+            location.replace('http://' + location.host + location.pathname + location.search + location.hash);
+        }
+    </script>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>ZENTRIK · Revisión</title>
+    <link rel="stylesheet" href="/css/base.css">
+    <link rel="stylesheet" href="/css/layout.css">
+    <link rel="stylesheet" href="/css/components.css">
+    <link rel="stylesheet" href="/css/pages/revision.css">
+</head>
+
+<body>
+    <div class="page">
+        <header class="header">
+            <div class="container row">
+                <div class="logo" style="display:flex;align-items:center;gap:10px;">
+                    <button id="btnBack" class="icon-btn" title="Volver" aria-label="Volver">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <polyline points="15 18 9 12 15 6"></polyline>
+                        </svg>
+                    </button>
+                    <img src="/img/ZENTRIK.png" alt="ZENTRIK" style="height:26px;display:block;" />
+                </div>
+
+                <div class="title">REVISIÓN</div>
+
+                <div class="right">
+                    <button id="btnFinTurno" class="btn small warn">Salir</button>
+                </div>
+            </div>
+        </header>
+
+        <main class="container">
+            <!-- ===== Filtros (fecha + turno) ===== -->
+            <section class="card rev-filter-section" id="filterSection">
+                <h3 class="rev-filter-title">Filtrar por Fecha / Turno</h3>
+                <div class="rev-filter-controls">
+                    <div class="rev-filter-field">
+                        <label for="filterFecha">Fecha</label>
+                        <input type="date" id="filterFecha" class="input" />
+                    </div>
+                    <div class="rev-filter-field rev-filter-field--small">
+                        <label for="filterTurno">Turno</label>
+                        <select id="filterTurno" class="input">
+                            <option value="">Todos</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                        </select>
+                    </div>
+                    <button id="filterBtn" class="btn primary small">Filtrar</button>
+                </div>
+
+                <!-- Selector de OT -->
+                <div id="otDropdownWrapper" class="rev-dropdown hidden">
+                    <label for="otDropdown">Orden de Trabajo</label>
+                    <div class="rev-dropdown-row">
+                        <select id="otDropdown" class="input">
+                            <option value="">-- Seleccione una OT --</option>
+                        </select>
+                        <span id="otCount" class="rev-count"></span>
+                    </div>
+                </div>
+
+                <!-- Selector de Lote/Tarjeta -->
+                <div id="loteDropdownWrapper" class="rev-dropdown hidden">
+                    <label for="loteDropdown">Lote (Tarjeta)</label>
+                    <div class="rev-dropdown-row">
+                        <select id="loteDropdown" class="input">
+                            <option value="">-- Seleccione un lote --</option>
+                        </select>
+                        <span id="loteCount" class="rev-count"></span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ===== Búsqueda directa por tarjeta ===== -->
+            <section class="card rev-search-section">
+                <div class="rev-search-row">
+                    <input id="searchInput" class="input" placeholder="Buscar por tarjeta…" />
+                    <button id="searchBtn" class="btn primary small">Buscar</button>
+                </div>
+            </section>
+
+            <!-- ===== Loading ===== -->
+            <div id="loading" class="hidden rev-loading">
+                <div class="rev-spinner"></div>
+                <p>Consultando datos…</p>
+            </div>
+
+            <!-- ===== Contenido principal ===== -->
+            <div id="content" class="hidden">
+                <!-- Info del lote -->
+                <section class="card rev-info-grid">
+                    <div class="rev-field">
+                        <label>Tarjeta</label>
+                        <input type="text" id="valTarjeta" class="input" readonly />
+                    </div>
+                    <div class="rev-field">
+                        <label>OT</label>
+                        <input type="text" id="valOT" class="input" readonly />
+                    </div>
+                    <div class="rev-field rev-field--full">
+                        <label>Producto / Nombre</label>
+                        <input type="text" id="valNombre" class="input" readonly />
+                    </div>
+                </section>
+
+                <!-- Agregar falla nueva -->
+                <section class="card rev-add-section" id="addFallaSection">
+                    <div class="rev-add-row">
+                        <div>
+                            <label>Cod. Falla</label>
+                            <input id="newCodfal" class="input" placeholder="Ej. 9" inputmode="numeric" />
+                        </div>
+                        <div>
+                            <label>Cantidad</label>
+                            <input id="newCantidad" class="input" placeholder="Ej. 5" inputmode="numeric" />
+                        </div>
+                        <button id="btnAddFalla" class="btn primary square" title="Agregar falla">+</button>
+                    </div>
+                    <div id="newFallaInfo" class="rev-falla-info hidden"></div>
+                </section>
+
+                <!-- Tabla de fallas -->
+                <section class="card" style="padding:0; overflow-x:auto;">
+                    <table class="table" id="faultsTable">
+                        <thead>
+                            <tr>
+                                <th>Cod</th>
+                                <th>Nombre Falla</th>
+                                <th>Remalle</th>
+                                <th>Revisión</th>
+                                <th style="width:90px">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="faultsBody"></tbody>
+                    </table>
+                </section>
+
+                <!-- Acciones finales -->
+                <section class="rev-actions" id="actionsSection">
+                    <button id="btnConforme" class="btn success">✓ Conforme</button>
+                    <button id="btnNoConforme" class="btn danger">✗ No Conforme — Enviar</button>
+                </section>
+
+                <!-- Observaciones -->
+                <section class="card rev-obs-section" id="obsSection">
+                    <label for="obsText">Observaciones (opcional)</label>
+                    <textarea id="obsText" class="input" placeholder="Notas sobre la revisión…" rows="2"
+                        maxlength="500"></textarea>
+                    <small id="obsCount" class="muted" style="text-align:right;display:block;">0/500</small>
+                </section>
+            </div>
+
+            <!-- ===== Error ===== -->
+            <div id="errorSection" class="hidden">
+                <div class="card rev-error">
+                    <p id="errorTxt"></p>
+                </div>
+            </div>
+        </main>
+
+        <footer class="footer" id="foot"></footer>
+    </div>
+
+    <script src="/js/auth.js"></script>
+    <script src="/js/ws.js"></script>
+    <script src="/js/api.js"></script>
+    <script src="/js/guard.js"></script>
+    <script type="module" src="/js/revision.js"></script>
+</body>
+
+</html>

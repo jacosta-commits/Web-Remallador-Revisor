@@ -26,6 +26,21 @@ export const env = {
     connectionTimeout: 15000
   },
 
+  // MEDIDORES_2023 (solo lectura – revisión)
+  MED_SQL: {
+    server: process.env.MED_SQL_SERVER || process.env.SQL_SERVER,
+    database: process.env.MED_SQL_DB || 'Medidores_2023',
+    user: process.env.MED_SQL_USER || process.env.SQL_USER,
+    password: process.env.MED_SQL_PASSWORD || process.env.SQL_PASSWORD,
+    options: {
+      encrypt: (process.env.MED_SQL_ENCRYPT ?? 'false') === 'true',
+      trustServerCertificate: (process.env.MED_SQL_TRUST_CERT ?? 'true') === 'true'
+    },
+    pool: { max: 10, min: 0, idleTimeoutMillis: 30000 },
+    requestTimeout: 30000,
+    connectionTimeout: 15000
+  },
+
   // APPSHEET001 (solo lectura)
   APP_SQL: {
     server: must('APP_SQL_SERVER'),
